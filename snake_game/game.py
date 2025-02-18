@@ -20,6 +20,7 @@ class SnakeGame:
         self.reset_game()
 
     def reset_game(self):
+        """Reset or initialize game state."""
         self.snake = [
             [WIDTH // 2, HEIGHT // 2],
             [WIDTH // 2 - BLOCK_SIZE, HEIGHT // 2],
@@ -27,6 +28,7 @@ class SnakeGame:
         ]
         self.direction = (BLOCK_SIZE, 0)
         self.ball = get_ball_position(self.snake)
+        self.score = 0
         self.running = True
 
     def process_events(self):
