@@ -44,13 +44,23 @@ class SnakeGame:
             self.snake[0][0] + self.direction[0],
             self.snake[0][1] + self.direction[1],
         ]
+
+        # Check collision with walls
+        if (
+            new_head[0] < 0
+            or new_head[0] >= WIDTH
+            or new_head[1] < 0
+            or new_head[1] >= HEIGHT
+        ):
+            self.running = False  # Or set a game_over flag
+
+        # Check collision with self
+        if new_head in self.snake:
+            self.running = False
+
         self.snake.insert(0, new_head)
 
-        # Check if the snake has eaten the ball
         if new_head == self.ball:
-            # Increase score and generate new ball position
-            if not hasattr(self, "score"):
-                self.score = 0
             self.score += 10
             from snake_game.utils import get_ball_position
 
