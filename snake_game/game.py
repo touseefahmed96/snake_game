@@ -101,9 +101,10 @@ class SnakeGame:
         pygame.display.flip()
 
     def handle_game_over(self):
-        # Display Game Over screen
+        """Display Game Over screen and handle input to restart or quit."""
         font = pygame.font.SysFont("Arial", 50, bold=True)
         small_font = pygame.font.SysFont("Arial", 28, bold=True)
+
         game_over_text = font.render("Game Over", True, (255, 0, 0))
         score_text = small_font.render(f"Score: {self.score}", True, (255, 255, 0))
         restart_text = small_font.render(
@@ -127,27 +128,27 @@ class SnakeGame:
         while waiting:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    waiting = False
-                    self.running = False
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r:
                         waiting = False
-                        self.reset_game()
+                        self.reset_game()  # Correctly reset the game state
+                        self.run()  # Restart the game loop
                     elif event.key == pygame.K_q:
-                        waiting = False
-                        self.running = False
+                        pygame.quit()
+                        sys.exit()
 
     def run(self):
+        """Main game loop."""
         while self.running:
             self.process_events()
             self.update()
             self.draw()
             self.clock.tick(FPS)
 
-        # Game over loop
+        # If game is over, handle restart properly
         self.handle_game_over()
-        pygame.quit()
-        sys.exit()
 
 
 if __name__ == "__main__":
