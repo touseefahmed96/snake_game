@@ -45,20 +45,40 @@ class SnakeGame:
             self.snake[0][1] + self.direction[1],
         ]
         self.snake.insert(0, new_head)
-        self.snake.pop()
+
+        # Check if the snake has eaten the ball
+        if new_head == self.ball:
+            # Increase score and generate new ball position
+            if not hasattr(self, "score"):
+                self.score = 0
+            self.score += 10
+            from snake_game.utils import get_ball_position
+
+            self.ball = get_ball_position(self.snake)
+        else:
+            self.snake.pop()
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-
+        # Draw ball (food)
         ball_center = (self.ball[0] + BLOCK_SIZE // 2, self.ball[1] + BLOCK_SIZE // 2)
         pygame.draw.circle(self.screen, (255, 255, 0), ball_center, BLOCK_SIZE // 2)
 
+        # Draw snake
         for segment in self.snake:
             pygame.draw.rect(
                 self.screen,
                 (0, 255, 0),
                 (segment[0], segment[1], BLOCK_SIZE, BLOCK_SIZE),
             )
+
+        # Display score
+        font = pygame.font.SysFont("Arial", 28, bold=True)
+        score_surface = font.render(
+            f"Score: {getattr(self, 'score', 0)}", True, (255, 255, 255)
+        )
+        self.screen.blit(score_surface, (10, 10))
+
         pygame.display.flip()
 
     def run(self):
