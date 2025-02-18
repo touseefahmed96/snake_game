@@ -1,26 +1,10 @@
 # snake_game/main.py
-import sys
-
-import pygame
-
-from snake_game.settings import HEIGHT, WIDTH
+from snake_game.game import SnakeGame
 
 
 def main():
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Snake Ball Eater")
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        screen.fill((0, 0, 0))
-        pygame.display.flip()
-
-    pygame.quit()
-    sys.exit()
+    game = SnakeGame()
+    game.run()
 
 
 if __name__ == "__main__":
