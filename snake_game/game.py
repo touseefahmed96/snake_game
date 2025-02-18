@@ -4,7 +4,7 @@ import sys
 import pygame
 
 from snake_game.settings import BLOCK_SIZE, FPS, HEIGHT, WIDTH
-from snake_game.utils import get_ball_position
+from snake_game.utils import create_gradient_surface, get_ball_position
 
 
 class SnakeGame:
@@ -13,6 +13,10 @@ class SnakeGame:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Snake Ball Eater")
         self.clock = pygame.time.Clock()
+
+        self.bg_surface = create_gradient_surface(
+            WIDTH, HEIGHT, (0, 50, 0), (0, 150, 0)
+        )
         self.reset_game()
 
     def reset_game(self):
@@ -69,24 +73,27 @@ class SnakeGame:
             self.snake.pop()
 
     def draw(self):
-        self.screen.fill((0, 0, 0))
-        # Draw ball (food)
+        # Draw gradient background
+        self.screen.blit(self.bg_surface, (0, 0))
+
+        # Draw ball
         ball_center = (self.ball[0] + BLOCK_SIZE // 2, self.ball[1] + BLOCK_SIZE // 2)
         pygame.draw.circle(self.screen, (255, 255, 0), ball_center, BLOCK_SIZE // 2)
 
-        # Draw snake
-        for segment in self.snake:
+        # Draw snake with gradient effect
+        for i, segment in enumerate(self.snake):
+            if i == 0:
+                color = (50, 150, 255)  # Head in blue
+            else:
+                shade = 255 - min(i * 5, 200)
+                color = (0, shade, 0)
             pygame.draw.rect(
-                self.screen,
-                (0, 255, 0),
-                (segment[0], segment[1], BLOCK_SIZE, BLOCK_SIZE),
+                self.screen, color, (segment[0], segment[1], BLOCK_SIZE, BLOCK_SIZE)
             )
 
-        # Display score
+        # Draw score
         font = pygame.font.SysFont("Arial", 28, bold=True)
-        score_surface = font.render(
-            f"Score: {getattr(self, 'score', 0)}", True, (255, 255, 255)
-        )
+        score_surface = font.render(f"Score: {self.score}", True, (255, 255, 255))
         self.screen.blit(score_surface, (10, 10))
 
         pygame.display.flip()
