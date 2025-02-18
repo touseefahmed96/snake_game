@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from snake_game.settings import BLOCK_SIZE, FPS, HEIGHT, WIDTH
+from snake_game.utils import get_ball_position
 
 
 class SnakeGame:
@@ -21,6 +22,7 @@ class SnakeGame:
             [WIDTH // 2 - 2 * BLOCK_SIZE, HEIGHT // 2],
         ]
         self.direction = (BLOCK_SIZE, 0)
+        self.ball = get_ball_position(self.snake)
         self.running = True
 
     def process_events(self):
@@ -47,6 +49,10 @@ class SnakeGame:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+
+        ball_center = (self.ball[0] + BLOCK_SIZE // 2, self.ball[1] + BLOCK_SIZE // 2)
+        pygame.draw.circle(self.screen, (255, 255, 0), ball_center, BLOCK_SIZE // 2)
+
         for segment in self.snake:
             pygame.draw.rect(
                 self.screen,
